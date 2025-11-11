@@ -7,12 +7,14 @@ import {
     query
 } from 'firebase/firestore';
 import { useCallback, useEffect, useState } from 'react';
-import { GiftedChat } from 'react-native-gifted-chat';
+import { View, StyleSheet } from 'react-native';
+import { GiftedChat, Bubble, Send, InputToolbar } from 'react-native-gifted-chat';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { auth, db } from '../firebaseConfig';
 
 //!!! --- THIS IS YOUR ENCRYPTION KEY ---!!!
 // For a real app, this key would be shared securely.
-// For your MTE demo, it's perfect to have it here.
+// For demo purposes, it's here.
 const ENCRYPTION_KEY = 'my-super-secret-key';
 
 export default function ChatScreen({ route, navigation }) {
@@ -22,7 +24,16 @@ export default function ChatScreen({ route, navigation }) {
 
   // Set the screen title to the person you're chatting with
   useEffect(() => {
-    navigation.setOptions({ title: recipientEmail });
+    navigation.setOptions({ 
+      title: recipientEmail,
+      headerStyle: {
+        backgroundColor: '#007AFF',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    });
   }, [navigation, recipientEmail]);
 
   // This "listens" for new messages in the database
@@ -35,7 +46,6 @@ export default function ChatScreen({ route, navigation }) {
         const data = doc.data();
         
         // --- THIS IS THE DECRYPTION ---
-        // Try to decrypt the text.
         let decryptedText = data.text;
         try {
           const bytes = CryptoJS.AES.decrypt(data.text, ENCRYPTION_KEY);
@@ -77,14 +87,107 @@ export default function ChatScreen({ route, navigation }) {
 
   }, [chatId]);
 
+  const renderBubble = (props) => {
+    return (
+      <Bubble
+        {...props}
+        wrapperStyle={{
+          right: {
+            backgroundColor: '#007AFF',
+          },
+          left: {
+            backgroundColor: '#E5E5EA',
+          }
+        }}
+        textStyle={{
+          right: {
+            color: '#fff',
+          },
+          left: {
+            color: '#000',
+          }
+        }}
+      />
+    );
+  };
+
+  const renderSend = (props) => {
+    return (
+      <Send
+        {...props}
+        containerStyle={styles.sendContainer}
+      >
+        <View style={styles.sendButton}>
+          <Text style={styles.sendText}>Send</Text>
+        </View>
+      </Send>
+    );
+  };
+
+  const renderInputToolbar = (props) => {
+    return (
+      <InputToolbar
+        {...props}
+        containerStyle={styles.inputToolbar}
+        primaryStyle={styles.inputPrimary}
+      />
+    );
+  };
+
   return (
-    <GiftedChat
-      messages={messages}
-      onSend={messages => onSend(messages)}
-      user={{
-        _id: currentUser.uid,
-        name: currentUser.email,
-      }}
-    />
+    <SafeAreaView style={styles.container} edges={['bottom']}>
+      <GiftedChat
+        messages={messages}
+        onSend={messages => onSend(messages)}
+        user={{
+          _id: currentUser.uid,
+          name: currentUser.email,
+        }}
+        renderBubble={renderBubble}
+        renderSend={renderSend}
+        renderInputToolbar={renderInputToolbar}
+        alwaysShowSend
+        placeholder="Type a message..."
+        showAvatarForEveryMessage={false}
+        renderAvatar={null}
+        timeTextStyle={{
+          left: { color: '#999' },
+          right: { color: '#fff' }
+        }}
+      />
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  sendContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 10,
+    marginBottom: 5,
+  },
+  sendButton: {
+    backgroundColor: '#007AFF',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 18,
+  },
+  sendText: {
+    color: '#fff',
+    fontWeight: '600',
+    fontSize: 16,
+  },
+  inputToolbar: {
+    borderTopWidth: 1,
+    borderTopColor: '#E8E8E8',
+    backgroundColor: '#fff',
+    paddingVertical: 4,
+  },
+  inputPrimary: {
+    alignItems: 'center',
+  },
+});
