@@ -26,7 +26,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {user? (
+        {user ? (
           // If user is logged in, show the chat screens
           <>
             <Stack.Screen name="ChatList" component={ChatListScreen} options={{ title: 'Chats' }} />
