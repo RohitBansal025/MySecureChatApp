@@ -86,7 +86,9 @@ export default function AuthScreen() {
           keyboardShouldPersistTaps="handled"
         >
           <View style={styles.header}>
-            <Text style={styles.logo}>🔐</Text>
+            <View style={styles.logoContainer}>
+              <Ionicons name="lock-closed" size={60} color="#007AFF" />
+            </View>
             <Text style={styles.title}>Secure Chat</Text>
             <Text style={styles.subtitle}>End-to-end encrypted messaging</Text>
           </View>
