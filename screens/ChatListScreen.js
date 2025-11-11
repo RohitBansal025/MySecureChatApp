@@ -91,8 +91,8 @@ export default function ChatListScreen({ navigation }) {
 
   const renderEmptyState = () => (
     <View style={styles.emptyContainer}>
-      <Text style={styles.emptyIcon}>💬</Text>
-      <Text style={styles.emptyTitle}>No Users Yet</Text>
+      <Ionicons name="chatbubbles-outline" size={80} color="#ccc" />
+      <Text style={styles.emptyTitle}>No Chats Yet</Text>
       <Text style={styles.emptyText}>
         Ask your friends to create an account to start chatting!
       </Text>
