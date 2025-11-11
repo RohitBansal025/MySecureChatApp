@@ -21,7 +21,7 @@ export default function App() {
     });
 
     return () => unsubscribe(); // Clean up the listener
-  },);
+  }, []);
 
   return (
     <NavigationContainer>
