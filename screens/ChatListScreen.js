@@ -18,8 +18,14 @@ import { auth, db } from '../firebaseConfig';
 export default function ChatListScreen({ navigation }) {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [userStatuses, setUserStatuses] = useState({});
 
   useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = () => {
     // Query Firestore for all users *except* the current one
     const currentUserUid = auth.currentUser.uid;
     const q = query(collection(db, 'users'), where('uid', '!=', currentUserUid));
@@ -28,10 +34,34 @@ export default function ChatListScreen({ navigation }) {
       const usersData = snapshot.docs.map(doc => doc.data());
       setUsers(usersData);
       setLoading(false);
+      setRefreshing(false);
     });
 
-    return () => unsubscribe();
-  }, []);
+    return unsubscribe;
+  };
+
+  // Listen for online statuses
+  useEffect(() => {
+    const unsubscribes = users.map(user => {
+      const statusRef = collection(db, 'userStatus');
+      const q = query(statusRef);
+      
+      return onSnapshot(q, (snapshot) => {
+        const statuses = {};
+        snapshot.docs.forEach(doc => {
+          statuses[doc.id] = doc.data();
+        });
+        setUserStatuses(statuses);
+      });
+    });
+
+    return () => unsubscribes.forEach(unsub => unsub && unsub());
+  }, [users]);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchUsers();
+  };
 
   // Helper function to create a unique chat room ID
   const getChatId = (user1, user2) => {
