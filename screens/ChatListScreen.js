@@ -1,5 +1,6 @@
+import React from 'react';
 import { signOut } from 'firebase/auth';
-import { collection, onSnapshot, query, where } from 'firebase/firestore';
+import { collection, onSnapshot, query, where, orderBy as firestoreOrderBy, limit } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { 
   Alert,
@@ -7,9 +8,11 @@ import {
   StyleSheet, 
   Text, 
   TouchableOpacity, 
-  View 
+  View,
+  RefreshControl 
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 import { auth, db } from '../firebaseConfig';
 
 export default function ChatListScreen({ navigation }) {
