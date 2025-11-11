@@ -226,14 +226,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 40,
   },
-  emptyIcon: {
-    fontSize: 80,
-    marginBottom: 20,
-  },
   emptyTitle: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#333',
+    marginTop: 20,
     marginBottom: 12,
   },
   emptyText: {
@@ -262,13 +259,27 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 2,
   },
+  avatarContainer: {
+    position: 'relative',
+    marginRight: 12,
+  },
   avatar: {
     width: 50,
     height: 50,
     borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 12,
+  },
+  onlineIndicator: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: '#4CD964',
+    borderWidth: 2,
+    borderColor: 'white',
   },
   avatarText: {
     color: 'white',
@@ -278,21 +289,34 @@ const styles = StyleSheet.create({
   chatInfo: {
     flex: 1,
   },
+  chatHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
   chatName: {
     fontSize: 16,
     fontWeight: '600',
     color: '#333',
-    marginBottom: 4,
   },
-  chatPreview: {
-    fontSize: 14,
-    color: '#999',
-  },
-  chevron: {
+  onlineBadge: {
+    backgroundColor: '#E8F5E9',
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 10,
     marginLeft: 8,
   },
-  chevronText: {
-    fontSize: 24,
-    color: '#ccc',
+  onlineBadgeText: {
+    fontSize: 10,
+    color: '#4CD964',
+    fontWeight: '600',
+  },
+  chatPreviewContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  chatPreview: {
+    fontSize: 13,
+    color: '#999',
   },
 });
