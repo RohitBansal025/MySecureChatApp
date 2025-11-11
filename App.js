@@ -16,14 +16,32 @@ const Stack = createStackNavigator();
 
 export default function App() {
   const [user, setUser] = useState(null);
+  const navigationRef = useRef(null);
 
   // This "listener" checks if the user is logged in or out
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user); // If user exists, they are logged in. If null, they are logged out.
+      setUser(user);
+      
+      // Register for push notifications when user logs in
+      if (user) {
+        registerForPushNotificationsAsync(user.uid);
+      }
     });
 
-    return () => unsubscribe(); // Clean up the listener
+    return () => unsubscribe();
+  }, []);
+
+  // Setup notification listeners
+  useEffect(() => {
+    if (navigationRef.current) {
+      const { notificationListener, responseListener } = setupNotificationListeners(navigationRef.current);
+      
+      return () => {
+        notificationListener.remove();
+        responseListener.remove();
+      };
+    }
   }, []);
 
   return (
