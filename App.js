@@ -1,9 +1,11 @@
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { onAuthStateChanged } from 'firebase/auth';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { auth } from './firebaseConfig';
+import { registerForPushNotificationsAsync, setupNotificationListeners } from './utils/notifications';
 
 // Import your screens
 import AuthScreen from './screens/AuthScreen';
