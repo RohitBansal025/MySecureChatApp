@@ -17,7 +17,7 @@ const ENCRYPTION_KEY = 'my-super-secret-key';
 
 export default function ChatScreen({ route, navigation }) {
   const { chatId, recipientEmail, recipientUid } = route.params;
-  const [messages, setMessages] = useState();
+  const [messages, setMessages] = useState([]);
   const currentUser = auth.currentUser;
 
   // Set the screen title to the person you're chatting with
