@@ -2,6 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useEffect, useState } from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { auth } from './firebaseConfig';
 
 // Import your screens
@@ -24,19 +25,29 @@ export default function App() {
   }, []);
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        {user ? (
-          // If user is logged in, show the chat screens
-          <>
-            <Stack.Screen name="ChatList" component={ChatListScreen} options={{ title: 'Chats' }} />
-            <Stack.Screen name="Chat" component={ChatScreen} />
-          </>
-        ) : (
-          // If user is not logged in, show the login screen
-          <Stack.Screen name="Auth" component={AuthScreen} options={{ title: 'Login or Sign Up' }} />
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <Stack.Navigator>
+          {user ? (
+            // If user is logged in, show the chat screens
+            <>
+              <Stack.Screen 
+                name="ChatList" 
+                component={ChatListScreen} 
+                options={{ headerShown: false }} 
+              />
+              <Stack.Screen name="Chat" component={ChatScreen} />
+            </>
+          ) : (
+            // If user is not logged in, show the login screen
+            <Stack.Screen 
+              name="Auth" 
+              component={AuthScreen} 
+              options={{ headerShown: false }} 
+            />
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
