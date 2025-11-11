@@ -124,30 +124,48 @@ export default function ChatListScreen({ navigation }) {
           keyExtractor={(item) => item.uid}
           contentContainerStyle={users.length === 0 && styles.emptyList}
           ListEmptyComponent={renderEmptyState}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              style={styles.chatItem}
-              onPress={() => {
-                const chatId = getChatId(auth.currentUser.uid, item.uid);
-                navigation.navigate('Chat', { 
-                  chatId: chatId, 
-                  recipientEmail: item.email,
-                  recipientUid: item.uid
-                });
-              }}
-            >
-              <View style={[styles.avatar, { backgroundColor: getAvatarColor(item.email) }]}>
-                <Text style={styles.avatarText}>{getInitials(item.email)}</Text>
-              </View>
-              <View style={styles.chatInfo}>
-                <Text style={styles.chatName}>{item.email}</Text>
-                <Text style={styles.chatPreview}>Tap to start chatting 🔐</Text>
-              </View>
-              <View style={styles.chevron}>
-                <Text style={styles.chevronText}>›</Text>
-              </View>
-            </TouchableOpacity>
-          )}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+          renderItem={({ item }) => {
+            const isOnline = userStatuses[item.uid]?.isOnline || false;
+            
+            return (
+              <TouchableOpacity
+                style={styles.chatItem}
+                onPress={() => {
+                  const chatId = getChatId(auth.currentUser.uid, item.uid);
+                  navigation.navigate('Chat', { 
+                    chatId: chatId, 
+                    recipientEmail: item.email,
+                    recipientUid: item.uid
+                  });
+                }}
+              >
+                <View style={styles.avatarContainer}>
+                  <View style={[styles.avatar, { backgroundColor: getAvatarColor(item.email) }]}>
+                    <Text style={styles.avatarText}>{getInitials(item.email)}</Text>
+                  </View>
+                  {isOnline && <View style={styles.onlineIndicator} />}
+                </View>
+                <View style={styles.chatInfo}>
+                  <View style={styles.chatHeader}>
+                    <Text style={styles.chatName}>{item.email}</Text>
+                    {isOnline && (
+                      <View style={styles.onlineBadge}>
+                        <Text style={styles.onlineBadgeText}>Online</Text>
+                      </View>
+                    )}
+                  </View>
+                  <View style={styles.chatPreviewContainer}>
+                    <Ionicons name="lock-closed" size={14} color="#999" />
+                    <Text style={styles.chatPreview}> End-to-end encrypted</Text>
+                  </View>
+                </View>
+                <Ionicons name="chevron-forward" size={24} color="#ccc" />
+              </TouchableOpacity>
+            );
+          }}
         />
       )}
     </SafeAreaView>
