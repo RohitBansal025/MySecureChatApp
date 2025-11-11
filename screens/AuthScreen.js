@@ -261,6 +261,24 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#e0e0e0',
   },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 50,
+    backgroundColor: '#f8f8f8',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+  },
+  passwordInput: {
+    flex: 1,
+    paddingHorizontal: 16,
+    fontSize: 16,
+    color: '#333',
+  },
+  eyeIcon: {
+    paddingHorizontal: 12,
+  },
   hint: {
     fontSize: 12,
     color: '#999',
