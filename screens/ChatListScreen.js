@@ -24,7 +24,7 @@ export default function ChatListScreen({ navigation }) {
   // This makes sure that user A chatting with user B
   // is the *same chat room* as user B chatting with user A.
   const getChatId = (user1, user2) => {
-    return user1 < user2? `${user1}_${user2}` : `${user2}_${user1}`;
+    return user1 < user2 ? `${user1}_${user2}` : `${user2}_${user1}`;
   };
 
   return (
