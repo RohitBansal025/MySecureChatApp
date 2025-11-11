@@ -5,7 +5,7 @@ import { Button, FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity } fr
 import { auth, db } from '../firebaseConfig';
 
 export default function ChatListScreen({ navigation }) {
-  const [users, setUsers] = useState();
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     // Query Firestore for all users *except* the current one
@@ -18,7 +18,7 @@ export default function ChatListScreen({ navigation }) {
     });
 
     return () => unsubscribe();
-  },);
+  }, []);
 
   // Helper function to create a unique chat room ID
   // This makes sure that user A chatting with user B
